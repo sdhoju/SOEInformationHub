@@ -117,17 +117,23 @@
 			echo "<h1>Tell us about Your announcement</h1>";
 			if (isset($_POST["submit"])) {
 				if( (isset($_POST["created_by"]) && $_POST["created_by"] !== "") && (isset($_POST["announcement_Title"]) && $_POST["announcement_Title"] !== "") && (isset($_POST["announcement_Text"]) && $_POST["announcement_Text"] !== "") &&(isset($_POST["announcement_Location"]) && $_POST["announcement_Location"] !== "") ){
-					$query = "INSERT INTO announcement ";
-					$query .= "VALUES (";
-					$query .= "123465789".", ";
+					
+					$_POST["created_by"] = $mysqli->real_escape_string($_POST["created_by"]);
+					$_POST["announcement_Title"] = $mysqli->real_escape_string($_POST["announcement_Title"]);
+					$_POST["announcement_Text"] = $mysqli->real_escape_string($_POST["announcement_Text"]);
+					$_POST["announcement_Location"] = $mysqli->real_escape_string($_POST["announcement_Location"]);
+
+					$query = "insert into announcement values('";
+					$query .= time()."', ";
 					$query .= "'".$_POST["created_by"]."', ";
 					$query .= "'".$_POST["announcement_Title"]."', ";
 					$query .= "'".$_POST["announcement_Text"]."', ";
 					$query .= "'".$_POST["announcement_Location"]."', ";
 					$query .= "'".$_POST['announcement_media']."');";
-					
+
 					$result = $mysqli->query($query); 
-							
+					print_r($result." Nothing ".$query);
+
 					if($result) {
 		
 						$_SESSION["message"] = $_POST["announcement_Title"]." has been created";
@@ -153,7 +159,7 @@
 					echo "<tr><td>Description : </td><td><textarea   name ='announcement_Text' value=''></textarea></td></tr>";
 					echo "<tr><td>Location: </td><td><input type = text name ='announcement_Location' value='' /></td></tr>";
 					echo "<tr><td>Poster: </td><td><input type = text name ='announcement_media' value='' /></td></tr>";
-					echo "<td ></td><td><input type= 'submit' name= 'submit' value= 'Submit'  /><br /><p>&laquo:<a href='index.php'>Cancel</a><td>";
+					echo "<td ></td><td><input type= 'submit' name= 'submit' value= 'Submit'  />    <a href='index.php'>Cancel</a><td>";
 					echo "";
 				echo"</table>";			
 				echo"</form>";
