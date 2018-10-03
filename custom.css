@@ -1,0 +1,59 @@
+#innercontent{
+    width:100%; 
+}
+.announcement-items.announcement-post{
+    font-size: 1.15em;
+    margin: auto;
+    width: 80%;
+}
+.announcement-post-title{
+    margin: auto;
+    font-size: 20px;
+    width: 80%;
+    }
+.announcement-post-image-header{
+    text-align: center;
+    margin: auto;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table, th , td {
+    border-collapse: collapse;
+    padding-left: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+th {
+    text-align: center; 
+    font-size: 20px;
+}
+
+table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+    background-color: #ffffff;
+}
