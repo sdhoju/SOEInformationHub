@@ -22,98 +22,16 @@
 </head>
 <body class='secondary'>
 	<?php  require_once("functions.php"); 
-	//require_once("session.php");
-	$mysqli = db_connection();?>
+	require_once("session.php");
+	$mysqli = db_connection();
+	readfile('header.html')
+	?>
 
-	<header>
-		<div id="watermark"></div>
-			<nav style="margin:0; background-color: #14213d;" class="navbar navbar-default">
-			<div class="container-fluid">
-		<div class="navbar-header">
-				<!--<a class="navbar-brand hidden-md hidden-sm hidden-xs" style=" background-image: url('/Content/Images/FirstImage.png'); background-repeat: no-repeat;" href='@Url.Action("Index", "Home")'></a>-->
-				<a class="navbar-brand hidden-sm visible-xs" style="color:white;" href="#">Who Are You?</a>
 
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				</button>
-			</div>
-
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-				<li><a href="/future/" style="color:white;">Prospective Student</a></li>
-				<li><a href="/undergraduate/" style="color:white;">Current Student</a></li>
-				<li><a href="/faculty_staff/dean.html" style="color:white;">Faculty &amp; Staff</a></li>
-				<li><a href="https://www.olemiss.edu/audience/parents.html" style="color:white;">Parents &amp; Families</a></li>
-				<li><a href="/alumni_friends/" style="color:white;">Alumni &amp; Friends</a></li>
-				<!--<li style='border-bottom: 1px solid red;'><a href='https://admissions.olemiss.edu/visit/' style='color:white;'>Visitors</a></li>-->
-				<li style="border-bottom: 1px solid red;"><a href="https://secure25.olemiss.edu/visit/engineering" style="color:white;">Visitors</a></li>
-				</ul>
-			</div>
-			</div>
-		</nav>
-
-		<!--<nav id="constituencies">
-			<dl class="audience">
-				<dt><span><a href='/audience'>Who Are You?</a></span></dt>
-				<dd><a href="/future/">Prospective Students</a></dd>
-				<dd><a href="/undergraduate/">Current Students</a></dd>
-				<dd><a href="/faculty_staff/dean.html">Faculty &amp; Staff</a></dd>
-				<dd><a href="http://www.olemiss.edu/audience/parents.html" target='_blank'>Parents &amp; Families</a></dd>
-				<dd><a href="/alumni_friends/">Alumni &amp; Friends</a></dd>
-				<dd><a href='https://secure25.olemiss.edu/visit/engineering' style='background-color:red; text-shadow:none;'>Visitors</a></dd>
-			</dl>
-		</nav>
-		<div id='constituencies-push'></div>-->
-		<section class="hero">
-			<div class=" umlogo">
-				<h1><a href="http://engineering.olemiss.edu">The University of Mississippi Engineering</a></h1>
-			</div>
-			<div class="searchbox">
-				<form onsubmit="return makeSearch()">
-					<!--<label>
-						<input type="submit" class="icons-main-search" value="">
-					</label>-->
-					<label>
-						<span class="hidetext">Search the UM website</span>
-						<input type="text" placeholder="Search UM" id="q">
-					</label>
-				</form>
-			</div>
-		</section>
-	</header>
-	<nav id="main" class="showmore">
-		<div class="bg"><!-- Needed for screen-width bgcolor --></div>
-		<div class="top">
-			<ul>
-				<li><h2 id="aboutum" class="top"><a href="/about/">About Engineering</a></h2></li>
-				<li><h2 id="academics" class="top"><a href="/programs/index.html">Academics</a></h2></li>
-				<li><h2 id="campuslife" class="top"><a href="/research/index.html">Research</a></h2></li>
-				<li><h2 id="newsevents" class="top"><a href="/news/all">News &amp; Events</a></h2></li>
-			</ul>
-		</div>
-		<div class="sublinks above">
-			<ul>
-			
-				<li><h3><a href="http://www.olemiss.edu" target="_blank"><span class="xtra">Ole Miss</span><span class="noxtra">UM</span> Home</a></h3></li>
-				<li><h3><a href="/partners/map/">International</a></h3></li>
-				<li><h3><a href="/community/">Community<span class="xtra"> &amp; Service</span></a></h3></li>
-				<li><h3><a href="/news/newsletter/">Newsletter</a></h3></li>
-				<li><h3><a href="/studentservices/">Student<span class="xtra"> Services</span></a></h3></li>
-				<li><h3><a href="http://www.umfoundation.com/giving/landing.php?school=engineering" class="support" target="_blank">Support <span class="noxtra">SoE</span><span class="xtra">Engineering</span></a></h3></li>
-			</ul>
-			<div class="subpush">
-				<div id="moresublinks">MORE LINKS</div>
-				<div id="fewersublinks">FEWER LINKS</div>
-			</div>
-		</div>
-	</nav>
 	<div  id="secmid">
 		<div  id="innercontent">
 			<?php
-			echo "<div class=''>";
+			echo "<div class='form'><center>";
 			echo "<h1>Tell us about Your announcement</h1>";
 			if (isset($_POST["submit"])) {
 				if( (isset($_POST["created_by"]) && $_POST["created_by"] !== "") && (isset($_POST["announcement_Title"]) && $_POST["announcement_Title"] !== "") && (isset($_POST["announcement_Text"]) && $_POST["announcement_Text"] !== "") &&(isset($_POST["announcement_Location"]) && $_POST["announcement_Location"] !== "") ){
@@ -122,9 +40,9 @@
 					$_POST["announcement_Title"] = $mysqli->real_escape_string($_POST["announcement_Title"]);
 					$_POST["announcement_Text"] = $mysqli->real_escape_string($_POST["announcement_Text"]);
 					$_POST["announcement_Location"] = $mysqli->real_escape_string($_POST["announcement_Location"]);
-
+					$announcement_ID=time();
 					$query = "insert into announcement values('";
-					$query .= time()."', ";
+					$query .= $announcement_ID."', ";
 					$query .= "'".$_POST["created_by"]."', ";
 					$query .= "'".$_POST["announcement_Title"]."', ";
 					$query .= "'".$_POST["announcement_Text"]."', ";
@@ -132,27 +50,27 @@
 					$query .= "'".$_POST['announcement_media']."');";
 
 					$result = $mysqli->query($query); 
-					print_r($result." Nothing ".$query);
+					// print_r($result." Nothing ".$query);
 
 					if($result) {
 		
 						$_SESSION["message"] = $_POST["announcement_Title"]." has been created";
-							header("Location: R_residents.php");
+							header('Location: https://turing.cs.olemiss.edu/~sdhoju/SeniorProject/announcement.php?id='.$announcement_ID);
 							exit;
 					}
 					else {
 		
 						$_SESSION["message"] = "Error! Could not change ".$_POST["announcement_Title"].$query;
 					}
+
 				}
 				else {
 					$_SESSION["message"] = "Unable to create Announcement. Fill in all information!";
-					header("Location: fill_Form.php");
 					exit;
 				}
 			}
 			else {
-				echo "<form action='index.php' method='post'>";
+				echo "<form action='fill_Form.php' method='post'>";
 				echo"<table id='t01'>";
 					echo "<tr><td>Creater : </td><td><input type = text name ='created_by' value= '' /></td></tr>";
 					echo "<tr><td>Title: </td><td><input type = text name ='announcement_Title' value='' /></td></tr>";
@@ -162,7 +80,7 @@
 					echo "<td ></td><td><input type= 'submit' name= 'submit' value= 'Submit'  />    <a href='index.php'>Cancel</a><td>";
 					echo "";
 				echo"</table>";			
-				echo"</form>";
+				echo"</form></center>";
 
 			}
 			?>

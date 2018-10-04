@@ -1,55 +1,51 @@
-#innercontent{
-    width:100%; 
-}
+
 .announcement-items.announcement-post{
     font-size: 1.15em;
-    margin: auto;
-    width: 80%;
+    margin-left: auto;
+    width: 90%;
+    padding: 2em;
 }
 .announcement-post-title{
-    margin: auto;
     font-size: 20px;
     width: 80%;
-    }
-.announcement-post-image-header{
     text-align: center;
-    margin: auto;
+    padding-bottom: 1em;
+    }
 
+.announcement-items .announcement-post-creater, .announcement-post-location{
+    font-size: 20px;;
+    text-align: end;
+    }
+    
+
+.announcement-post-text{
+    padding-top: 1em;
+    font-size: 20px;
+    text-align: justify;
+    }
+    
+
+
+.announcement-post-image-header {
+    width: 50%;
+    height: auto;
+    margin-left: 25%;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.form{
+  width: 1200px;  
+}
 
 table, th , td {
     border-collapse: collapse;
     padding-left: 5px;
 	padding-bottom: 5px;
-	padding-top: 5px;
+    padding-top: 5px;
+    font-size: 15px;
+
+
 }
 
-th {
-    text-align: center; 
-    font-size: 20px;
-}
 
 table tr:nth-child(odd) {
     background-color: #f1f1f1;
