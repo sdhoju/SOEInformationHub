@@ -10,7 +10,7 @@
 		
 
 		
-////////////////////////////////////////////////////////////////////////		
+		
 		//mysqli connect expects host, username, password, database name
 		$mysqli = new mysqli(DBHOST, USERNAME, PASSWORD, DBNAME);
 	
@@ -27,44 +27,16 @@
 	}
 
 	function new_header($name = "Engineering Header") {
-		echo "<html lang='en'>";
-		echo "<head>";
-		echo "	<title>$name</title>";
-		//		<!-- Link to Foundation -->";
-		// echo "	<link rel='stylesheet' href='css_final2017/normalize.css'>";
-		// echo "	<link rel='stylesheet' href='css_final2017/foundation.css'>";
-	  
-		// echo "	<script src='js/vendor/modernizr.js'></script>";
-		echo "</head>";
-		echo "<body>";
-		echo "  <div class='contain-to-grid sticky'>";
-		echo "  <nav class='top-bar' data-topbar data-options='sticky_on: large'>";
-		echo "  <ul class='title-area'>";
-		echo "  <li class='name'>";
-//////////////////////////////////////////////////////////////////////////////////////////////////
-		//  Complete the <h1> tag below by adding <your home directory>/final/ (e.g., mine would read /home/kdavidso/final/ )
-		//  BE SURE TO KEEP THE ~ such that the link begins ~yourWebid
-		
-		echo " <h1 align='left'><a href='/~sdhoju/SeniorProject/index.php'>School of Engineering Information hub</a></h1>";
-					//echo "<br /><p><a href='index.php'>Index</a>";
-/////////////////////////////////////////////////////////////////////////////////////////////////
-		echo "  </li>";
-		echo "  </ul>";
-		echo "  </nav>";
-		echo "  </div>";	
-		echo "<div class='row'>";
-		echo "<label for='left-label' class='left inline'>";
+		readfile('header.html');
 	}
 	
 	
 	function new_footer($name='Engineering Footer ', $mysqli){
 		echo "<br /><br /><br />";
-///////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		
 	    echo "<h4><div class='text-center'> TODO </div></h4>";
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 		echo "</label>";
 		echo "</div>";
 		echo "</body>";
@@ -73,6 +45,7 @@
 		//Close database connection
 		$mysqli->close();
 	}
+	
 	function password_encrypt($password) {
 	  $hash_format = "$2y$10$";   // Use Blowfish with a "cost" of 10
 	  $salt_length = 22; 					// Blowfish salts should be 22-characters or more

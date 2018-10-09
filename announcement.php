@@ -36,7 +36,7 @@
 		<div  id="innercontent">
 		<div style="text-align:center; font-size:large; ">
 		
-		<span><a href="index.php">Feed</a></span>
+		<span><a href="feed.php">Feed</a></span>
 		<span><a href="fill_Form.php">Fill FORM</a></span>
 		<span><a href="User_dashboard.php">List Announcemnts</a></span>
 	
@@ -46,7 +46,10 @@
 			
 		if(isset($_GET['id'])&&$_GET['id']!==""){
 				$ID = $_GET["id"];
-				$query = "SELECT * FROM announcement  where announcement_ID =".$ID;
+
+				$query ="SELECT announcement_ID,announcement_Title,announcement_Text,announcement_Location,
+				announcement_date,announcement_time,announcement_media,
+				first_name, last_name,email,phone,Student_organization FROM announcement natural join SOEIHuser where announcement_ID =".$ID;
 				$result = $mysqli->query($query);
 				
 			}
@@ -55,8 +58,8 @@
 
 
 				echo '<div class="announcement-items announcement-post" id="'.$row['announcement_ID'].'">';
-				echo '<img alt="" class="announcement-post-image-header" src="'.$row['announcement_media'].'">';
 				echo "<h3 class='announcement-post-title'>".$row['announcement_Title']."</h3>";
+				echo '<img alt="" class="announcement-post-image-header" src="'.$row['announcement_media'].'">';
 				echo '<div class="announcement-items announcement-post-creater" >Created by: '.$row['created_by']."</div>";
 				echo '<div class="announcement-items announcement-post-location">At: '.$row['announcement_Location']."</div>";
 				echo '<div class="announcement-items announcement-post-text">';
@@ -70,9 +73,38 @@
 			}
 		echo "</div>";
 	?>
+		<form action="" method="post">
+			<input type="submit" value="Send Email" />
+			<input type="hidden" name="button_pressed" value="1" />
+		</form>
+
+		<?php
+
+		if(isset($_POST['button_pressed']))
+		{
+			$to      = 'Samee.dhoju@gmail.com';
+			$subject = $row['announcement_Title'];
+			$message ='<h2 style="text-align:center;">'.$row['announcement_Title'].
+			'</h2></br><img alt="" class="announcement-post-image-header" src="'.$row['announcement_media'].'"></br>'.
+			 $row['announcement_Text'].
+			 '</ br>Location: '.$row['announcement_Location'].'</ br>Date and time: '.$row['announcement_date']." at ".$row['announcement_time']. 
+			 '</ br>Contact: '.$row['first_name']." ".$row['last_name'].'('.$row['Student_organization'].')'.
+			'</br>'.$row['email'].
+			"</br> ".$row['phone']
+			 ;
+			// $headers = $row['announcement_Title'];
+			// $headers[] = 'MIME-Version: 1.0';
+			$headers = 'Content-type: text/html; charset=iso-8859-1';
+			$headers.='From: TEST_SOE@example.com' . "\r\n";
+			mail($to, $subject, $message, $headers);
+
+			echo 'Email Sent.';
+		}
+		?>
 	</div>
 		</div>
 	</div>
+
 	</body>
 </html>
 

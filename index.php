@@ -1,3 +1,10 @@
+<?php
+		
+		require_once("functions.php"); 
+		require_once("session.php");
+		// new_header("sada");
+	$mysqli = db_connection();
+	?>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -19,46 +26,79 @@
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
 	<link rel='stylesheet' href='_css/style.css'>
     <link rel='stylesheet' href='custom.css'>
+
+
 </head>
 <body class='secondary'>
-	<?php  require_once("functions.php"); 
-	require_once("session.php");
-
-	$mysqli = db_connection();
-	readfile("header.html");
-
-	?>
-
+	
 
 	<div  id="secmid">
 		<div  id="innercontent">
-		<div style="text-align:center; font-size:large; ">
-		
-		
-		</div>
-			<?php
-			$query ="SELECT * FROM announcement";
-			$result=$mysqli->query($query);
-			echo "	<div class='announcement-items'>";
-				while ($row = $result->fetch_assoc())  {
-					
-					echo '<div class="announcement-items announcement-post" id="'.$row['announcement_ID'].'">';
-					echo "<h3 class='announcement-post-title'>".$row['announcement_Title']."</h3>";
 
-					echo "<a href = 'announcement.php?id=".urldecode($row["announcement_ID"])."'>";
-					echo '<img alt="" style=""class="announcement-post-image-header" src="'.$row['announcement_media'].'">';
-					echo '</a>';
-					echo '<div class="announcement-items announcement-post-creater" >Created by: '.$row['created_by']."</div>";
-					echo '<div class="announcement-items announcement-post-location">At: '.$row['announcement_Location']."</div>";
-					echo '<div class="announcement-items announcement-post-text">';
-						echo (strlen($row['announcement_Text']) >= 500) ? 
-							substr($row['announcement_Text'], 0, 500)."<a href ='announcement.php?id=".urldecode($row["announcement_ID"])."'>... Read more</a>":$row['announcement_Text'];
-						echo"</div>";
-					echo"</div>";
+		
+
+
+	<?php  
+// readfile("Login.php");
+	if (($output = message()) !== null) {
+		echo $output;
+	}
+
+	if (isset($_POST["submit"])) {
+	  if (isset($_POST["username"]) && $_POST["username"] !== "" && isset($_POST["password"]) && $_POST["password"] !== "") {
+	    $username = $_POST["username"];
+	    $password = $_POST["password"];
+
+			$query = "select * from ";	
+			$query .= "SOEIHuser where ";	
+			$query .= "username = '".$username."'";
+			$query .= "LIMIT 1;";
+
+			$result = $mysqli->query($query);
+
+			if ($result && $result->num_rows > 0) {
+
+				$row = $result->fetch_assoc();		
+				if(password_check($password,$row["password"])){
+					$_SESSION["username"]=$row["username"];
+							if($row["isAdmin"]==1){
+								$_SESSION["isAdmin"]=$username;
+								redirect_to("admin.php");
+							}
+							else{
+								redirect_to("User_dashboard.php");
+							}
 				}
-			echo "</div>";
-			?>
+			else {
+			  $_SESSION["message"] = "Wrong Password not found";
+			  redirect_to("index.php");
+			}
+		   
+	  }
+	  else {
+		$_SESSION["message"] = "Username/Password not found";
+		redirect_to("index.php");
+	  }
+	 }
+	}
+?>
+		<center>
+			<h3>Login Page TODO: Make it a modal</h3>
+			<label  for='center-label' class='center'>
+				<form action="index.php" method="post">
+				<p>&nbsp;&nbsp;Username:&nbsp;&nbsp;
+					<input type="text" name="username"/>
+				</p>
+				<p>&nbsp;&nbsp;Password:&nbsp;&nbsp;
+					<input type="password" name="password" value="" />
+				</p>
+				<input type="submit" name="submit" value="Submit" />
+				</form>
+			</label>
+		</center>
 			</div>
-		</div>
+			
 	</div>
-</body>
+</div>
+
+

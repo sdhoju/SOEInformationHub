@@ -11,21 +11,22 @@
     text-align: center;
     padding-bottom: 1em;
     }
+.announcement-items.announcement-box{
+    display: inline-block;
+
+    }
 
 .announcement-items .announcement-post-creater, .announcement-post-location{
     font-size: 20px;;
     text-align: end;
     }
     
-
 .announcement-post-text{
     padding-top: 1em;
     font-size: 20px;
     text-align: justify;
     }
     
-
-
 .announcement-post-image-header {
     width: 50%;
     height: auto;
@@ -53,3 +54,5 @@ table tr:nth-child(odd) {
 table tr:nth-child(even) {
     background-color: #ffffff;
 }
+
+

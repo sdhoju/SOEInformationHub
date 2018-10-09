@@ -75,6 +75,26 @@
 					echo "<tr><td>Creater : </td><td><input type = text name ='created_by' value= '' /></td></tr>";
 					echo "<tr><td>Title: </td><td><input type = text name ='announcement_Title' value='' /></td></tr>";
 					echo "<tr><td>Description : </td><td><textarea   name ='announcement_Text' value=''></textarea></td></tr>";
+					echo "<tr><td>Major</td>";
+					echo '<td>';
+					echo' <input type="checkbox" name="major" value="Chemical Engineering" checked="checked"> Chemical Engineering<br>';
+					echo' <input type="checkbox" name="major" value="Computer Science" checked="checked"> Computer Science<br>';
+					echo' <input type="checkbox" name="major" value="Electrical Engineering" checked="checked"> Electrical Engineering<br>';
+					echo' <input type="checkbox" name="major" value="General Engineering" checked="checked"> General Engineering<br>';
+					echo' <input type="checkbox" name="major" value="Mechanical Engineering" checked="checked"> Mechanical Engineering<br>';
+					echo' <input type="checkbox" name="major" value="Biochemistry" checked="checked"> Biochemistry<br>';
+					echo' <input type="checkbox" name="major" value="Biomedical Engineering" checked="checked"> Biomedical Engineering<br>';
+					echo' <input type="checkbox" name="major" value="Civil Engineering" checked="checked"> Civil Engineering<br>';
+					echo' <input type="checkbox" name="major" value="Geological Engineering" checked="checked"> Geological Engineering<br>';
+					echo' <input type="checkbox" name="major" value="Geology" checked="checked"> Geology<br>';
+					echo' <input type="checkbox" name="major" value="Linguistics" checked="checked"> Linguistics<br>';
+
+
+
+
+					echo '</td>';
+
+					echo "</tr>";
 					echo "<tr><td>Location: </td><td><input type = text name ='announcement_Location' value='' /></td></tr>";
 					echo "<tr><td>Poster: </td><td><input type = text name ='announcement_media' value='' /></td></tr>";
 					echo "<td ></td><td><input type= 'submit' name= 'submit' value= 'Submit'  />    <a href='index.php'>Cancel</a><td>";

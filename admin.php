@@ -33,9 +33,7 @@
 
 	<div  id="secmid">
 		<div  id="innercontent">
-
-		<h1 style="font-size:2em; text-align:center;">USER Dashboard. More Functionality to be added</h1>
-
+		<h1 style="font-size:2em; text-align:center;">ADMIN PAGE Dashboard. More Functionality to be added</h1>
 		<center>
 		<span><a href="feed.php">Feed</a></span>
 		<span><a href="fill_Form.php">Fill FORM</a></span>
