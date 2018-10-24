@@ -4,11 +4,8 @@
 	
 	function message() {
 		if (isset($_SESSION["message"])) {
-			
-			$output = "<div class='row'>";
-			$output .= "<div data-alert class='alert-box info round'>";
-			$output .= htmlentities($_SESSION["message"]);
-			$output .= "</div>";
+			$output .= "<div data-alert class='alert-box info round' style=z-index: -1;''>";
+				$output .= htmlentities($_SESSION["message"]);
 			$output .= "</div>";
 			
 			// clear message after use

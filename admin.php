@@ -1,80 +1,67 @@
-<?php  require_once("functions.php"); 
-	//require_once("session.php");
+<?php
+	require_once("functions.php"); 
+	require_once("session.php");
 
+	new_header();
 	$mysqli = db_connection();
-	?>
+	if (($output = message()) !== null) {
+		echo $output;
+	}
 
+	if (isset($_POST["submit"])) {
+	  if (isset($_POST["username"]) && $_POST["username"] !== "" && isset($_POST["password"]) && $_POST["password"] !== "") {
+	    	$username = $_POST["username"];
+	    	$password = $_POST["password"];
+			$query = "select * from ";	
+			$query .= "SOEIHuser where ";	
+			$query .= "username = '".$username."'";
+			$query .= "LIMIT 1;";
 
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-    <meta charset='UTF-8'>
-    <meta name='keywords' content='academic, university, universities, Mississippi, University of Mississippi, The University of Mississippi, Ole Miss, college, colleges, Oxford' />
-    <meta name='description' content='This document and its local links copyright 2011 by the University of Mississippi.  Use for non-profit and educational purposes explicitly granted.' />
-    <meta name='author' content='University of Mississippi - School of Engineering' />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />-->
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />-->
+			$result = $mysqli->query($query);
 
-	<title>School of Engineering &bull; Information Hub</title>
+			if ($result && $result->num_rows > 0) {
+				$row = $result->fetch_assoc();		
 
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
-
-	<script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
-	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
-	<link rel='stylesheet' href='_css/style.css'>
-    <link rel='stylesheet' href='custom.css'>
-
-
-</head>
-<body class='secondary'>
-
-	<div  id="secmid">
-		<div  id="innercontent">
-		<h1 style="font-size:2em; text-align:center;">ADMIN PAGE Dashboard. More Functionality to be added</h1>
-		<center>
-		<span><a href="feed.php">Feed</a></span>
-		<span><a href="fill_Form.php">Fill FORM</a></span>
-		<span><a href="User_dashboard.php">List Announcemnts</a></span>
-	
-		</center>
-		<div class='row'>
-			<?php
-			$query ="SELECT * FROM announcement";
-			$result=$mysqli->query($query);
-			echo "<table>";
-			echo "<tr><th>Title</th>
-					<th>Created By</th>
-					<th>Text</th>
-					<th>Location</th>
-					<th></th>
-				</tr>";
-
-				// echo "<td>&nbsp;<a href = 'ViewResident.php?id=".urldecode($row["Student_id"])."'>View</a>&nbsp;&nbsp;</td>";
-
-				while ($row = $result->fetch_assoc())  {
-					echo '<tr ">';
-					$string=$row["announcement_Text"];
-					echo "<td>&nbsp;<a href = 'announcement.php?id=".urldecode($row["announcement_ID"])."'>".$row['announcement_Title']."</a>&nbsp;&nbsp;</td>";
-
-					echo "<td>".$row['created_by']."</td>";
-
-						echo "<td>";
-						echo (strlen($string) >= 500) ? 
-							substr($string, 0, 500).'<a href="#">... Read more</a>':$string;
-						echo"</td>";
-						
-						echo "<td>".$row['announcement_Location']."</td>";
-						echo "<td>&nbsp;<a href = 'delete.php?id=".urldecode($row["announcement_ID"])." ' onclick='return confirm('Are you sure?');'><i class='fa fa-trash'></i>
-						</a>&nbsp;&nbsp;</td>";
-
-					echo "</tr>";
+				if(password_check($password,$row["password"])){
+					$_SESSION["username"]=$row["username"];
+						redirect_to("dashboard.php");
+							// if($row["isAdmin"]==1){
+							// 	$_SESSION["isAdmin"]=$username;
+							// 	redirect_to("dashboard.php");
+							// }
+							// else{
+							// 	redirect_to("dashboard.php");
+							// }
 				}
-			echo "</table>";
-			?>
-			</div>
+				else {
+				$_SESSION["message"] = "Wrong Password not found";
+				redirect_to("admin.php");
+			}
+		}
+		else {
+			$_SESSION["message"] = "Username/Password not found";
+			redirect_to("admin.php");
+	 	}
+	 }
+	}
+?>
+
+<div  id="secmid">
+	<div  id="innercontent">
+			<h3>Login Page TODO: Make it a modal</h3>
+			<label  for='center-label' class='center'>
+				<form action="admin.php" method="post">
+					<p>&nbsp;&nbsp;Username:&nbsp;&nbsp;
+						<input type="text" name="username"/>
+					</p>
+					<p>&nbsp;&nbsp;Password:&nbsp;&nbsp;
+						<input type="password" name="password" value="" />
+					</p>
+					<input type="submit" name="submit" value="Submit" />
+				</form>
+			</label>
 		</div>
 	</div>
-</body>
+</div>
+
+

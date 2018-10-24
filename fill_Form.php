@@ -1,110 +1,131 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-    <meta charset='UTF-8'>
-    <meta name='keywords' content='academic, university, universities, Mississippi, University of Mississippi, The University of Mississippi, Ole Miss, college, colleges, Oxford' />
-    <meta name='description' content='This document and its local links copyright 2011 by the University of Mississippi.  Use for non-profit and educational purposes explicitly granted.' />
-    <meta name='author' content='University of Mississippi - School of Engineering' />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />-->
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />-->
 
-	<title>School of Engineering &bull; Information Hub</title>
-
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
-
-	<script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
-	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
-	<link rel='stylesheet' href='_css/style.css'>
-    <link rel='stylesheet' href='custom.css'>
-</head>
-<body class='secondary'>
-	<?php  require_once("functions.php"); 
+<?php
+	require_once("functions.php"); 
+	new_header("header.html");
 	require_once("session.php");
+	require_once("Mailer.php");
+
+
 	$mysqli = db_connection();
-	readfile('header.html')
-	?>
 
+		if (isset($_POST["submit"])) {
+			
+			if( (isset($_POST["contact_Name"]) && $_POST["contact_Name"] !== "") 
+			&&(isset($_POST["email"]) && $_POST["email"] !== "") 
 
+			&&(isset($_POST["announcement_Title"]) && $_POST["announcement_Title"] !== "") 
+			&& (isset($_POST["announcement_Text"]) && $_POST["announcement_Text"] !== "")
+			&&(isset($_POST["announcement_Location"]) && $_POST["announcement_Location"] !== "")
+			&&(isset($_POST["announcement_date"]) && $_POST["announcement_date"] !== "")
+			&&(isset($_POST["announcement_time"]) && $_POST["announcement_time"] !== "")
+			){
+			
+				$_POST["contact_Name"] = $mysqli->real_escape_string($_POST["contact_Name"]);
+				$_POST["email"] = $mysqli->real_escape_string($_POST["email"]);
+				$_POST["phone"] = $mysqli->real_escape_string($_POST["phone"]);
+				$_POST["S_organization"] = $mysqli->real_escape_string($_POST["S_organization"]);
+
+				$_POST["announcement_Title"] = $mysqli->real_escape_string($_POST["announcement_Title"]);
+				$_POST["announcement_Text"] = $mysqli->real_escape_string($_POST["announcement_Text"]);
+				$_POST["announcement_Location"] = $mysqli->real_escape_string($_POST["announcement_Location"]);
+				
+				$announcement_ID=time();
+				$query = "insert into announcement values('";
+				$query .= $announcement_ID."', ";
+				$query .= "'".$_POST["contact_Name"]."', ";
+				$query .= "'".$_POST["email"]."', ";
+				$query .= "'".$_POST["phone"]."', ";
+				$query .= "'".$_POST["S_organization"]."', ";
+				$query .= "'".$_POST["announcement_Title"]."', ";
+				$query .= "'".$_POST["announcement_Text"]."', ";
+				$query .= "'".$_POST["announcement_Location"]."', ";
+				$query .= "'".$_POST["announcement_date"]."', ";
+				$query .= "'".$_POST["announcement_time"]."', ";
+				$query .= "'".$_POST['announcement_media']."', 0);";
+
+				$result = $mysqli->query($query); 
+				// print_r($result." Nothing ".$query);
+
+				if($result) {
+					$_SESSION["message"] = $_POST["announcement_Title"]." has been created";
+					
+						$to=array(
+							array(
+								'name'=>$_POST["contact_Name"],
+								'email'=>$_POST["email"]
+							),
+						);
+						$subject="Sumbission Received";
+						$html='Thank you for submitting about'.$_POST["announcement_Title"].'. SOE will get to it soon.';
+						$from=array('name'=>'School of Engineering','email'=>'samee.dhoju@gmail.com');
+						$replyto=array('name'=>'Sameer Dhoju','email'=>'samee.dhoju@gmail.com');
+
+						$newMailer = new Mailer(true);
+						$newMailer->mail($to,$subject,$html,$from,$replyto);
+					
+					header("Location: index.php");	
+				}
+				// else {
+				// 	$_SESSION["message"] = "Error! Could not change ".$_POST["announcement_Title"].$query;
+				// 	redirect_to('announcement1.php?id='.$announcement_ID);
+				// 	exit;
+				// }
+		}
+		else {
+			
+			$_SESSION["message"] = "Required information Missing";
+			// redirect_to('fill_Form.php');
+			header("Location: fill_Form.php");
+			// exit;
+		}
+}
+?>
+		
 	<div  id="secmid">
 		<div  id="innercontent">
-			<?php
-			echo "<div class='form'><center>";
-			echo "<h1>Tell us about Your announcement</h1>";
-			if (isset($_POST["submit"])) {
-				if( (isset($_POST["created_by"]) && $_POST["created_by"] !== "") && (isset($_POST["announcement_Title"]) && $_POST["announcement_Title"] !== "") && (isset($_POST["announcement_Text"]) && $_POST["announcement_Text"] !== "") &&(isset($_POST["announcement_Location"]) && $_POST["announcement_Location"] !== "") ){
+		<div class='form'>
+            <center>
+			<form action='' method='post'>
+				<?php
+					if (($output = message()) !== null) {
+						echo '<center>'.$output.'</center>';
+						$output=null;
+					}
+				?>
+                     <h3 style="font-size: 2em;">Tell us about Your announcement</h3>
+				<table id='t01'>
+					<tr><td>Creater's Name <span class="asterisk">*</span> </td><tr></tr><td><input type = text name ='contact_Name' value= '' /></td></t>
+					<tr><td>Contact Email <span class="asterisk">*</span></td><tr></tr><td><input type = text name ='email' value= '' /></td></tr>
+					<tr><td> ContactPhone  </td><tr></tr><td><input type = text name ='phone' value= '' /></td></tr>
+					<tr><td>Organization  </td><tr></tr><td><input type = text name ='Organization' value= '' /></td></tr>
+
+					<tr><td>Event's Title <span class="asterisk">*</span> </td><tr></tr><td><input type = text name ='announcement_Title' value='' /></td></tr>
+					<tr><td>Event's Description <span class="asterisk">*</span> </td><tr></tr><td><textarea   name ='announcement_Text' value=''></textarea></td></tr>
+					<!-- // echo "<tr><td>Major</td>";
+					// 	echo '<td>';
+					// 		echo' <input type="checkbox" name="major" value="Chemical Engineering" checked="checked"> Chemical Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="Computer Science" checked="checked"> Computer Science<br>';
+					// 		echo' <input type="checkbox" name="major" value="Electrical Engineering" checked="checked"> Electrical Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="General Engineering" checked="checked"> General Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="Mechanical Engineering" checked="checked"> Mechanical Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="Biomedical Engineering" checked="checked"> Biomedical Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="Civil Engineering" checked="checked"> Civil Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="Geological Engineering" checked="checked"> Geological Engineering<br>';
+					// 		echo' <input type="checkbox" name="major" value="Geology" checked="checked"> Geology<br>';
+					// 	echo '</td>';
+					// echo "</tr>";  -->
+					<tr><td>Location <span class="asterisk">*</span> </td><tr></tr><td><input type = text name ='announcement_Location' value='' /></td></tr>
+					<tr><td>Date <span class="asterisk">*</span> </td><tr></tr><td><input type = text name ='announcement_date' value='' /></td></tr>
+					<tr><td>Time <span class="asterisk">*</span> </td><tr></tr><td><input type = text name ='announcement_time' value='' /></td></tr>
+
+					<tr><td>Attachment </td><tr></tr><td><input type = text name ='announcement_media' value='' /></td></tr>
+					<td><input class="form_submit_button" type= 'submit' name= 'submit' value= 'Submit'/> &nbsp;&nbsp;&nbsp;&nbsp;  <a href='index.php'>Cancel</a> <td>
 					
-					$_POST["created_by"] = $mysqli->real_escape_string($_POST["created_by"]);
-					$_POST["announcement_Title"] = $mysqli->real_escape_string($_POST["announcement_Title"]);
-					$_POST["announcement_Text"] = $mysqli->real_escape_string($_POST["announcement_Text"]);
-					$_POST["announcement_Location"] = $mysqli->real_escape_string($_POST["announcement_Location"]);
-					$announcement_ID=time();
-					$query = "insert into announcement values('";
-					$query .= $announcement_ID."', ";
-					$query .= "'".$_POST["created_by"]."', ";
-					$query .= "'".$_POST["announcement_Title"]."', ";
-					$query .= "'".$_POST["announcement_Text"]."', ";
-					$query .= "'".$_POST["announcement_Location"]."', ";
-					$query .= "'".$_POST['announcement_media']."');";
-
-					$result = $mysqli->query($query); 
-					// print_r($result." Nothing ".$query);
-
-					if($result) {
-		
-						$_SESSION["message"] = $_POST["announcement_Title"]." has been created";
-							header('Location: https://turing.cs.olemiss.edu/~sdhoju/SeniorProject/announcement.php?id='.$announcement_ID);
-							exit;
-					}
-					else {
-		
-						$_SESSION["message"] = "Error! Could not change ".$_POST["announcement_Title"].$query;
-					}
-
-				}
-				else {
-					$_SESSION["message"] = "Unable to create Announcement. Fill in all information!";
-					exit;
-				}
-			}
-			else {
-				echo "<form action='fill_Form.php' method='post'>";
-				echo"<table id='t01'>";
-					echo "<tr><td>Creater : </td><td><input type = text name ='created_by' value= '' /></td></tr>";
-					echo "<tr><td>Title: </td><td><input type = text name ='announcement_Title' value='' /></td></tr>";
-					echo "<tr><td>Description : </td><td><textarea   name ='announcement_Text' value=''></textarea></td></tr>";
-					echo "<tr><td>Major</td>";
-					echo '<td>';
-					echo' <input type="checkbox" name="major" value="Chemical Engineering" checked="checked"> Chemical Engineering<br>';
-					echo' <input type="checkbox" name="major" value="Computer Science" checked="checked"> Computer Science<br>';
-					echo' <input type="checkbox" name="major" value="Electrical Engineering" checked="checked"> Electrical Engineering<br>';
-					echo' <input type="checkbox" name="major" value="General Engineering" checked="checked"> General Engineering<br>';
-					echo' <input type="checkbox" name="major" value="Mechanical Engineering" checked="checked"> Mechanical Engineering<br>';
-					echo' <input type="checkbox" name="major" value="Biochemistry" checked="checked"> Biochemistry<br>';
-					echo' <input type="checkbox" name="major" value="Biomedical Engineering" checked="checked"> Biomedical Engineering<br>';
-					echo' <input type="checkbox" name="major" value="Civil Engineering" checked="checked"> Civil Engineering<br>';
-					echo' <input type="checkbox" name="major" value="Geological Engineering" checked="checked"> Geological Engineering<br>';
-					echo' <input type="checkbox" name="major" value="Geology" checked="checked"> Geology<br>';
-					echo' <input type="checkbox" name="major" value="Linguistics" checked="checked"> Linguistics<br>';
-
-
-
-
-					echo '</td>';
-
-					echo "</tr>";
-					echo "<tr><td>Location: </td><td><input type = text name ='announcement_Location' value='' /></td></tr>";
-					echo "<tr><td>Poster: </td><td><input type = text name ='announcement_media' value='' /></td></tr>";
-					echo "<td ></td><td><input type= 'submit' name= 'submit' value= 'Submit'  />    <a href='index.php'>Cancel</a><td>";
-					echo "";
-				echo"</table>";			
-				echo"</form></center>";
-
-			}
-			?>
-			</div>
+					
+				</table>		
+            </form> 
+            </center>
 		</div>
 	</div>
-</body>
+</div>
+<?php new_footer(""); ?>

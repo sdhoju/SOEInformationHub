@@ -1,104 +1,79 @@
+
 <?php
-		
-		require_once("functions.php"); 
-		require_once("session.php");
-		// new_header("sada");
+	require_once("functions.php"); 
+	require_once("session.php");
+	new_header("header.html");
 	$mysqli = db_connection();
-	?>
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-    <meta charset='UTF-8'>
-    <meta name='keywords' content='academic, university, universities, Mississippi, University of Mississippi, The University of Mississippi, Ole Miss, college, colleges, Oxford' />
-    <meta name='description' content='This document and its local links copyright 2011 by the University of Mississippi.  Use for non-profit and educational purposes explicitly granted.' />
-    <meta name='author' content='University of Mississippi - School of Engineering' />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />-->
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />-->
 
-	<title>School of Engineering &bull; Information Hub</title>
-
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
-
-	<script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
-	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
-	<link rel='stylesheet' href='_css/style.css'>
-    <link rel='stylesheet' href='custom.css'>
-
-
-</head>
-<body class='secondary'>
-	
-
+?>
 	<div  id="secmid">
 		<div  id="innercontent">
 
-		
+			<?php
+			$query ="SELECT * FROM announcement";
+			$result=$mysqli->query($query);
+			echo "	<div class='announcement-items'>";
+				while ($row = $result->fetch_assoc())  {
+					echo '<div class="announcement-items announcement-post" id="'.$row['announcement_ID'].'">';
+						echo'<div id="attachment_377" style="width: 480px" class="wp-caption alignleft">';
+							echo'<img class="announcement-post-image-header" src="'.$row['announcement_media'].'" alt="'.$row['announcement_Title'].'">';
+							echo'<div id="myModal" class="modal"><span class="close">&times;</span><img class="modal-content" id="img01"><div id="caption"></div></div><script src="_js/imagemodal.js"></script>';
+						echo'</div>';
+						echo "<a href = 'announcement1.php?id=".urldecode($row["announcement_ID"])."'>";
+							echo "<h3 class='announcement-post-title'>".$row['announcement_Title']."</h3>";
+						echo'</a>';
+						// echo '<div class="announcement-items announcement-post-location">Location: '.$row['announcement_Location'].
+						// '</br>Date and time: '.$row['announcement_date']." at ".$row['announcement_time']."</div>";
+						echo'<b>'.$row['announcement_Location'].'<br><br>'.$row['announcement_date']." at ".$row['announcement_time'].' </b>';
+						echo'<b> <br><br>CONTACT:<br>'.$row['contact_Name'].'<br>'.$row['email']." </br> ".$row['phone'].' </b>';
+						echo '<p>';
+						echo (strlen($row['announcement_Text']) >= 500) ? 
+									substr($row['announcement_Text'], 0, 500)."<a href ='announcement.php?id=".urldecode($row["announcement_ID"])."'>... Read more</a>":$row['announcement_Text'];
+								echo'</p>';
 
-
-	<?php  
-// readfile("Login.php");
-	if (($output = message()) !== null) {
-		echo $output;
-	}
-
-	if (isset($_POST["submit"])) {
-	  if (isset($_POST["username"]) && $_POST["username"] !== "" && isset($_POST["password"]) && $_POST["password"] !== "") {
-	    $username = $_POST["username"];
-	    $password = $_POST["password"];
-
-			$query = "select * from ";	
-			$query .= "SOEIHuser where ";	
-			$query .= "username = '".$username."'";
-			$query .= "LIMIT 1;";
-
-			$result = $mysqli->query($query);
-
-			if ($result && $result->num_rows > 0) {
-
-				$row = $result->fetch_assoc();		
-				if(password_check($password,$row["password"])){
-					$_SESSION["username"]=$row["username"];
-							if($row["isAdmin"]==1){
-								$_SESSION["isAdmin"]=$username;
-								redirect_to("admin.php");
-							}
-							else{
-								redirect_to("User_dashboard.php");
-							}
+						// echo '<div class="announcement-items announcement-post" id="'.$row['announcement_ID'].'">';
+						// 	echo "<a href = 'announcement1.php?id=".urldecode($row["announcement_ID"])."'>";
+						// 		echo "<h3 class='announcement-post-title'>".$row['announcement_Title']."</h3>";
+						// 		echo '<div class="announcement-items announcement-box" >';
+						// 		echo '<img alt="" style=""class="announcement-post-image-header" src="'.$row['announcement_media'].'">
+								
+						echo '</div>';
+							
+				
+					echo"</div>";
 				}
-			else {
-			  $_SESSION["message"] = "Wrong Password not found";
-			  redirect_to("index.php");
-			}
-		   
-	  }
-	  else {
-		$_SESSION["message"] = "Username/Password not found";
-		redirect_to("index.php");
-	  }
-	 }
-	}
-?>
-		<center>
-			<h3>Login Page TODO: Make it a modal</h3>
-			<label  for='center-label' class='center'>
-				<form action="index.php" method="post">
-				<p>&nbsp;&nbsp;Username:&nbsp;&nbsp;
-					<input type="text" name="username"/>
-				</p>
-				<p>&nbsp;&nbsp;Password:&nbsp;&nbsp;
-					<input type="password" name="password" value="" />
-				</p>
-				<input type="submit" name="submit" value="Submit" />
-				</form>
-			</label>
-		</center>
-			</div>
-			
+			echo "</div>";
+			?>
+
+		</div>
 	</div>
-</div>
+
+	
+<?php new_footer(""); ?>
 
 
+
+// if(isset($_GET['id'])&&$_GET['id']!==""){
+// 					$ID = $_GET["id"];
+// 					$query ="SELECT * FROM announcement where announcement_ID =".$ID;
+// 					$result = $mysqli->query($query);
+// 				}
+// 				if ($result && $result->num_rows > 0)  {
+// 					$row = $result->fetch_assoc();
+
+// 					echo '<div class="announcement-items announcement-post" id="'.$row['announcement_ID'].'">';
+
+// 					echo "<h3 class='announcement-post-title'>".$row['announcement_Title']."</h3>";
+// 					echo'<div id="attachment_377" style="width: 320px" class="wp-caption alignright">';
+// 						echo'<img id="myImg"  class="announcement-post-image-header" src="'.$row['announcement_media'].'"alt='.$row['announcement_Title'].'>';
+// 					echo'<div id="myModal" class="modal"><span class="close">&times;</span><img class="modal-content" id="img01"><div id="caption"></div></div><script src="_js/imagemodal.js"></script>';
+// 					echo'</div>';
+
+// 					echo '<p>'. $row['announcement_Text'].'</p>';
+				
+// 					echo"</div>";
+// 				}		
+// 				else{
+// 					echo "There is no Announcement";
+// 				}
+// 			echo "</div>";

@@ -1,20 +1,37 @@
 <?php
+	
 	function redirect_to($new_location) {
-		header("Location: " . $new_location);
+		header("Location: ".$new_location);
 		exit;
 	}
+
+/*
+	function creat_event($summary,$location,$description){
+		$event = new Google_Service_Calendar_Event(array(
+			'summary' => 'Google I/O 2015',
+			'location' => '800 Howard St., San Francisco, CA 94103',
+			'description' => 'A chance to hear more about Google\'s developer products.',
+			'start' => array(
+				'dateTime' => '2015-05-28T09:00:00-07:00',
+				'timeZone' => 'America/Los_Angeles',
+			),
+			'end' => array(
+				'dateTime' => '2015-05-28T17:00:00-07:00',
+				'timeZone' => 'America/Los_Angeles',
+			),
+		));
+		
+		$calendarId = 'primary';
+		$event = $service->events->insert($calendarId, $event);
+		printf('Event created: %s\n', $event->htmlLink);
+	}
+*/
 	
 	function db_connection() {
 
-	require_once('/home/sdhoju/DBDhojuSameer.php');
-		
-
-		
-		
+		require_once('/home/sdhoju/DBDhojuSameer.php');		
 		//mysqli connect expects host, username, password, database name
 		$mysqli = new mysqli(DBHOST, USERNAME, PASSWORD, DBNAME);
-	
-		// Test if connection succeeded
 		/*
 		if($mysqli->connect_errno) {
 			die("Could not connect to server!<br />");
@@ -32,15 +49,8 @@
 	
 	
 	function new_footer($name='Engineering Footer ', $mysqli){
-		echo "<br /><br /><br />";
-		
-		
-	    echo "<h4><div class='text-center'> TODO </div></h4>";
-
-		echo "</label>";
-		echo "</div>";
-		echo "</body>";
-		echo "</html>";
+		readfile('footer.html');
+		echo'</div>';
 
 		//Close database connection
 		$mysqli->close();

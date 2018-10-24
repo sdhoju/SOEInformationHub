@@ -1,7 +1,18 @@
-<?php  require_once("functions.php"); 
-	//require_once("session.php");
+<?php require_once("functions.php"); 
+	require_once("session.php");
 
+	// new_header(); 
 	$mysqli = db_connection();
+	if (($output = message()) !== null) {
+		echo $output;
+	}
+	
+	if (!isset($_SESSION["username"])) {
+		$_SESSION["message"] = "You must log in first";
+		redirect_to("index.php");
+	}
+	
+
 	?>
 
 
@@ -43,7 +54,11 @@
 	
 		</center>
 		<div class='row'>
+		
+
 			<?php
+			echo "Hi ".$_SESSION["username"];
+			echo "<a href='logout.php'>  logout</a>";
 			$query ="SELECT * FROM announcement";
 			$result=$mysqli->query($query);
 			echo "<table>";
