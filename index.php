@@ -10,7 +10,7 @@
 		<div  id="innercontent">
 
 			<?php
-			$query ="SELECT * FROM announcement";
+			$query ="SELECT * FROM announcement where published =1";
 			$result=$mysqli->query($query);
 			echo "	<div class='announcement-items'>";
 				while ($row = $result->fetch_assoc())  {

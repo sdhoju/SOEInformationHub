@@ -12,7 +12,7 @@
 			if(isset($_GET['id'])&&$_GET['id']!==""){
 			
 					$ID = $_GET["id"];
-					$query ="SELECT * FROM announcement where announcement_ID =".$ID;
+					$query ="SELECT * FROM announcement where  published = 1 AND announcement_ID =".$ID;
 					$result = $mysqli->query($query);
 				}
 				$url='https://turing.cs.olemiss.edu/~sdhoju/SeniorProject/announcement1.php?id='.$ID;

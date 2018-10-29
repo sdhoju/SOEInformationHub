@@ -125,7 +125,14 @@ padding-bottom: 5em;
 table {
     background-color: #14213d;
 }
-
+.published-button{
+    background-color: green;
+    color: #030303;
+}
+.unpublished-button{
+    background-color:red;
+    color: #030303;
+}
 
 /* table tr:nth-child(odd) {
     background-color: #f1f1f1;

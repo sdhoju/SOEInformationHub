@@ -26,7 +26,7 @@
 			$admin = $_SESSION["isAdmin"];
 			echo "Hi ".$admin;
 			echo "<a href='logout.php'>  logout</a>";
-			$query ="SELECT * FROM announcement";
+			$query ="SELECT * FROM announcement order by published;";
 			$result=$mysqli->query($query);
 			echo "<table class='admin_dashboard'>";
 			echo "<tr><th>Title</th>
@@ -45,7 +45,7 @@
 					echo "<td><a href = 'announcement1.php?id=".urldecode($row["announcement_ID"])."'>".$row['announcement_Title']."</a></td>";
 
 					echo "<td>".$row['contact_Name']."</td>";
-
+						
 						echo "<td>";
 						echo (strlen($string) >= 500) ? 
 							substr($string, 0, 500).'<a href="#">... Read more</a>':$string;
@@ -54,10 +54,19 @@
 						echo "<td>".$row['announcement_Location']."</td>";
 						echo "<td>&nbsp;<a href = 'delete.php?id=".urldecode($row["announcement_ID"])." ' onclick='return confirm('Are you sure?');'><i class='fa fa-trash'></i>
 						</a>&nbsp;&nbsp;</td>";
+						$class='unpublished-button';
+						$value = 'Publish';
+
+						if($row["published"]==1){
+							$class='published-button';
+							$value = 'Unpublish';
+						} 
+						
 						echo '<td><form action="" method="post">';
-							echo'<input type="submit" value="Send Email" />';
-							echo'<input type="hidden" name="button_pressed" value="1" />';
+							echo'<input type="submit" value='.$value.' class='.$class.'>';
+							echo'<input type="hidden" name="button_pressed" value='.$row["announcement_ID"].' />';
 						echo'</form></td>';
+						
 					
 					echo "</tr>";
 				}
@@ -70,7 +79,17 @@
 
 
 <?php
-			// if(isset($_POST['button_pressed']))
+if(isset($_POST['button_pressed']))
+{	
+	$query ="UPDATE announcement SET published = IF(published=1, 0, 1)where announcement_ID=".$_POST['button_pressed'];
+	$result=$mysqli->query($query);
+	header("Refresh:0");
+
+	// print_r($_POST['button_pressed']);
+}
+
+// UPDATE announcement SET published = IF(published=1, 0, 1)where announcement_ID=123457;
+// if(isset($_POST['button_pressed']))
 			// {
 			// 	$to=array(
 			// 		array(
@@ -87,4 +106,5 @@
 			// 	$newMailer->mail($to,$subject,$html,$from,$replyto);
 			// }
 
+			
 ?>
